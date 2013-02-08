@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'rack-simple-auth'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.date        = '2013-02-08'
   s.summary     = 'A rack middleware for cookie authentication.'
   s.description = 'A middleware the prevents access to a rack app without the proper cookie.'
@@ -14,4 +14,5 @@ Gem::Specification.new do |s|
 
   s.files    = ['lib/rack-simple-auth.rb', 'README.md']
   s.add_dependency 'rack'
+  s.add_dependency 'openssl'
 end

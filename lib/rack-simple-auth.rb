@@ -1,5 +1,4 @@
-require 'rack'
-require 'rack/request'
+%w[ rubygems rack rack/request openssl ].each { |s| require s }
 
 module Rack
   class SimpleAuth
@@ -16,7 +15,7 @@ module Rack
       if authenticated? request.cookies
         @app.call(env)
       else
-        [302, {'Location' => "#{@login_url}?return_to=#{request.url}"}, ['You must be logged in to see this.']]
+        [302, {'Content-Type' => 'text/plain', 'Location' => "#{@login_url}?return_to=#{request.url}"}, ['You must be logged in to see this.']]
       end
     end
 
