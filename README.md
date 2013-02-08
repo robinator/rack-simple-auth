@@ -7,9 +7,17 @@ A dead simple rack middleware for cookie authentication.  This middleware enhanc
 For rails, create an initializer file with something like:
 
     MyApp::Application.config.middleware.use Rack::SimpleAuth,
-      key: 'your_cookie_key',
-      secret: 'my_long_secret',
-      login_url: 'http://url_where_user_will_be_redirected_to_authenticate.com'
+      key: 'your_cookie_key', # required
+      secret: 'my_long_secret', # required
+      login_url: 'http://url_where_user_will_be_redirected_to_authenticate.com', # required
+      authenticated_with: Proc.new { |value| true } # optional: must return a boolean
+
+By default, the middleware doesn't actually check the value of the cookie, only that the correct key exists and hasn't been tampered with. You can add more complex rules by passing the `authenticated_with` option with a proc that takes the cookie value as its only argument.
+
+For example:
+
+    # assuming you had a User model and the cookie value is a user_id
+    authenticated_with: Proc.new { |value| user = User.find(value) && user.admin? }
 
 ### How it Works
 

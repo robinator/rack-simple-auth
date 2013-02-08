@@ -1,3 +1,6 @@
+require 'rack'
+require 'rack/request'
+
 module Rack
   class SimpleAuth
     def initialize(app, options = {})
@@ -5,6 +8,7 @@ module Rack
       @key = options[:key]
       @secret = options[:secret]
       @login_url = options[:login_url]
+      @authenticated_with = options[:authenticated_with] || Proc.new { |value| true }
     end
 
     def call(env)
@@ -20,7 +24,12 @@ module Rack
       if data = cookies[@key]
         packed_data, digest = data.split('--')
         hmac = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA1.new, @secret, packed_data)
-        digest == hmac # false if tampering going on
+        begin
+          # false if tampering going on
+          digest == hmac && @authenticated_with.call(packed_data.unpack("m*").first)
+        rescue
+          false
+        end
       else
         false
       end
