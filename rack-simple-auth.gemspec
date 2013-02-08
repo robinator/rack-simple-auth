@@ -14,5 +14,4 @@ Gem::Specification.new do |s|
 
   s.files    = ['lib/rack-simple-auth.rb', 'README.md']
   s.add_dependency 'rack'
-  s.add_dependency 'openssl'
 end
