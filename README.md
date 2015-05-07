@@ -23,9 +23,9 @@ For example:
 To bypass rack-simple-auth on certain conditions, you can pass in the except option a Proc to determine whether a page should be publicly viewable.  The Proc will receive as an argument the request object.
 
 For example:
+
     # allow public viewing of a single page
     except: Proc.new { |request| request.path == '/everyone' }
-
     # allow public viewing of a particular domain
     except: Proc.new { |request| request.host == 'public.example.com' }
 
