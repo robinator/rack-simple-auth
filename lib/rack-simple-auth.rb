@@ -8,11 +8,12 @@ module Rack
       @secret = options[:secret]
       @login_url = options[:login_url]
       @authenticated_with = options[:authenticated_with] || Proc.new { |value| true }
+      @except = options[:except] || Proc.new { false }
     end
 
     def call(env)
       request = Request.new(env)
-      if authenticated? request.cookies
+      if authenticated?(request.cookies) || @except.call(request)
         @app.call(env)
       else
         [302, {'Content-Type' => 'text/plain', 'Location' => "#{@login_url}?return_to=#{request.url}"}, ['You must be logged in to see this.']]
