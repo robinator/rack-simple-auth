@@ -20,6 +20,15 @@ For example:
     # assuming you had a User model and the cookie value is a user_id
     authenticated_with: Proc.new { |value| user = User.find(value) && user.admin? }
 
+To bypass rack-simple-auth on certain conditions, you can pass in the except option a Proc to determine whether a page should be publicly viewable.  The Proc will receive as an argument the request object.
+
+For example:
+    # allow public viewing of a single page
+    except: Proc.new { |request| request.path == '/everyone' }
+
+    # allow public viewing of a particular domain
+    except: Proc.new { |request| request.host == 'public.example.com' }
+
 ### How it Works
 
 The middleware relies on you creating a custom cookie with your own authentication code. Your authentication cookie code can decide which domain this cookie applies to, allowing you to create a universal access token for all apps on a particular subdomain.
