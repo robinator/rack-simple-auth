@@ -10,7 +10,8 @@ For rails, create an initializer file with something like:
       key: 'your_cookie_key', # required
       secret: 'my_long_secret', # required
       login_url: 'http://url_where_user_will_be_redirected_to_authenticate.com', # required
-      authenticated_with: Proc.new { |value| true } # optional: must return a boolean
+      authenticated_with: Proc.new { |value| true }, # optional: must return a boolean
+      except: Proc.new { |request| request.path.match(/exclude_path/) } # optional
 
 By default, the middleware doesn't actually check the value of the cookie, only that the correct key exists and hasn't been tampered with. You can add more complex rules by passing the `authenticated_with` option with a proc that takes the cookie value as its only argument.
 
